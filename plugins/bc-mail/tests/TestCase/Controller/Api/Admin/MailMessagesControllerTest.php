@@ -342,15 +342,12 @@ class MailMessagesControllerTest extends BcTestCase
         $this->assertEquals('MailMessages', $dbLog->controller);
         $this->assertEquals('batch', $dbLog->action);
 
-        // 一括削除が失敗の場合のテスト
-        $data = ['batch_targets' => ['invalid id'], 'batch' => 'delete'];
+        // 数字以外の ID や存在しない ID は飛ばし、エラーにしないこと
+        $data = ['batch_targets' => ['invalid id', 99], 'batch' => 'delete'];
         // 受信メール一括削除のAPIを叩く
         $this->post("/baser/api/admin/bc-mail/mail_messages/batch/1.json?token=$this->accessToken", $data);
         // レスポンスのコードを確認する
-        $this->assertResponseCode(500);
-        // レスポンスのメッセージ内容を確認する
-        $result = json_decode((string)$this->_response->getBody());
-        $this->assertStringContainsString('($id) must be of type int, string given', $result->message);
+        $this->assertResponseOk();
 
         //不要なテーブルを削除
         $MailMessagesService->dropTable(1);

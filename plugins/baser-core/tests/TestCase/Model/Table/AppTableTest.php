@@ -161,6 +161,22 @@ class AppTableTest extends BcTestCase
     }
 
     /**
+     * Test filterExistingIds
+     * 数字で、かつ存在する ID だけを送信された順序のまま返す
+     */
+    public function testFilterExistingIds()
+    {
+        $this->loadFixtureScenario(PermissionGroupsScenario::class);
+        $Permission = new TablePermissionsTable();
+        $ids = $Permission->find()->select(['id'])->all()->extract('id')->toArray();
+        $this->assertNotEmpty($ids);
+        $first = (string)$ids[0];
+        $this->assertEquals([$first], $Permission->filterExistingIds([99999, "1'", 'abs(1)', [1], $first]));
+        $this->assertEquals([], $Permission->filterExistingIds([]));
+        $this->assertEquals([], $Permission->filterExistingIds([99999]));
+    }
+
+    /**
      * test offEvent And onEvent
      */
     public function testOffAndOnEvent()

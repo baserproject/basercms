@@ -770,6 +770,9 @@ class BlogPostsService implements BlogPostsServiceInterface
         if (!$ids) return true;
         $db = $this->BlogPosts->getConnection();
         if (!method_exists($this, $method)) return false;
+        // 削除済みの ID や数字以外の値は飛ばす（例外にすると、対象の有無で応答が変わる）
+        $ids = $this->BlogPosts->filterExistingIds($ids);
+        if (!$ids) return true;
         $db->begin();
         foreach($ids as $id) {
             if (!$this->$method($id)) {

@@ -234,6 +234,9 @@ class MailMessagesService implements MailMessagesServiceInterface
     public function batch(string $method, array $ids): bool
     {
         if (!$ids) return true;
+        // 削除済みの ID や数字以外の値は飛ばす（例外にすると、対象の有無で応答が変わる）
+        $ids = $this->MailMessages->filterExistingIds($ids);
+        if (!$ids) return true;
         $db = $this->MailMessages->getConnection();
         $db->begin();
         foreach($ids as $id) {
