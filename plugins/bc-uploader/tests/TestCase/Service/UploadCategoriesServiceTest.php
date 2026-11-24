@@ -228,10 +228,11 @@ class UploadCategoriesServiceTest extends BcTestCase
         $blogTags = $this->UploaderCategoriesService->getIndex([])->toArray();
         $this->assertCount(0, $blogTags);
 
-        // 存在しない id を指定された場合は例外が発生すること
+        // 存在しない id を指定された場合は飛ばして true を返すこと
         // サービスメソッドを呼ぶ
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->UploaderCategoriesService->batch('delete', [1, 2, 3]);
+        $this->assertTrue($this->UploaderCategoriesService->batch('delete', [1, 2, 3]));
+        // 数字以外の値が含まれていても飛ばして true を返すこと
+        $this->assertTrue($this->UploaderCategoriesService->batch('delete', ['invalid id']));
     }
 
     /**

@@ -269,14 +269,14 @@ class UploaderCategoriesControllerTest extends BcTestCase
         $uploaderCategories = $uploaderCategoriesService->getIndex([])->all();
         $this->assertCount(0, $uploaderCategories);
 
-        //存在しないアップロードカテゴリIDを指定した場合、
+        //存在しないアップロードカテゴリIDを指定した場合、飛ばしてエラーにしないこと
         //APIを呼ぶ
         $this->post("/baser/api/admin/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
         //ステータスを確認
-        $this->assertResponseCode(404);
+        $this->assertResponseSuccess();
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データが見つかりません。', $result->message);
+        $this->assertEquals('一括処理が完了しました。', $result->message);
 
         // 無効な$allowMethodを指定の場合は、
         $data = [

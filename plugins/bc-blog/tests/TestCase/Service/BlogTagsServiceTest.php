@@ -148,9 +148,10 @@ class BlogTagsServiceTest extends BcTestCase
         // 存在メソッドの場合は false を返すこと
         $this->assertFalse($this->BlogTagsService->batch('test', [1, 2, 3]));
 
-        // 存在しない id を指定された場合は例外が発生すること
-        $this->expectException('Cake\Datasource\Exception\RecordNotFoundException');
-        $this->BlogTagsService->batch('delete', [1, 2, 3]);
+        // 存在しない id を指定された場合は飛ばして true を返すこと
+        $this->assertTrue($this->BlogTagsService->batch('delete', [1, 2, 3]));
+        // 数字以外の値が含まれていても飛ばして true を返すこと
+        $this->assertTrue($this->BlogTagsService->batch('delete', ['invalid id']));
     }
 
     /**
