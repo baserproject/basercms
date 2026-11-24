@@ -467,4 +467,38 @@ class UsersServiceTest extends BcTestCase
         $this->assertEquals($this->Users->getIndex([])->count(), $this->Users->getIndex(['user_group_id' => [1]])->count());
     }
 
+    /**
+     * test filterUserGroupIds
+     */
+    public function test_filterUserGroupIds()
+    {
+        // 数字以外のユーザーグループ ID は取り除く
+        $rs = $this->Users->filterUserGroupIds(['user_groups' => ['_ids' => [1, '2', "3'", 'abs(4)', [5]]]]);
+        $this->assertEquals([1, '2'], $rs['user_groups']['_ids']);
+        // 配列でない場合は空にする
+        $rs = $this->Users->filterUserGroupIds(['user_groups' => ['_ids' => "1'"]]);
+        $this->assertEquals([], $rs['user_groups']['_ids']);
+        // 指定がない場合はそのまま
+        $this->assertEquals(['name' => 'a'], $this->Users->filterUserGroupIds(['name' => 'a']));
+    }
+
+    /**
+     * test create
+     * 数字以外のユーザーグループ ID が含まれても例外にならない
+     */
+    public function testCreate_non_numeric_user_group_id()
+    {
+        $this->loginAdmin($this->getRequest('/'));
+        $user = $this->Users->create([
+            'name' => 'ucmitz',
+            'user_groups' => ['_ids' => [1, "1'"]],
+            'email' => 'example@example.com',
+            'real_name_1' => 'test',
+            'password' => 'Testtest1234',
+            'password_1' => 'Testtest1234',
+            'password_2' => 'Testtest1234'
+        ]);
+        $this->assertEquals(1, count($user->user_groups));
+    }
+
 }
