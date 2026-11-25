@@ -127,6 +127,10 @@ class BlogTagsControllerTest extends BcTestCase
         //失敗テスト
         $this->delete('/baser/admin/bc-blog/blog_tags/delete/1');
         $this->assertResponseCode(404);
+
+        // 数字以外の ID を指定した場合は 404
+        $this->delete("/baser/admin/bc-blog/blog_tags/delete/1'");
+        $this->assertResponseCode(404);
     }
 
     /**

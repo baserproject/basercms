@@ -142,6 +142,9 @@ class WidgetAreasControllerTest extends BcTestCase
         // ステータスを確認
         $this->assertResponseCode(302);
         $this->assertFlashMessage('ウィジェットエリア「標準サイドバー」を削除しました。');
+        // 数字以外の ID を指定した場合は 404
+        $this->post("/baser/admin/bc-widget-area/widget_areas/delete/2'");
+        $this->assertResponseCode(404);
         // データが削除できるか確認
         $this->expectException(RecordNotFoundException::class);
         WidgetAreaFactory::get(1);

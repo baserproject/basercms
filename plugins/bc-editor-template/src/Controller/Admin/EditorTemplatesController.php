@@ -139,7 +139,7 @@ class EditorTemplatesController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(EditorTemplatesServiceInterface $service, $id)
+    public function delete(EditorTemplatesServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
 
