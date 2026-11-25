@@ -253,8 +253,9 @@ class MailContentsServiceTest extends BcTestCase
         $result = $this->MailContentsService->copy($data);
         $this->assertEquals('Nghiem', $result->content->title);
 
+        // 存在しない ID の場合は、データが見つからない例外とする
         $data['entity_id'] = 0;
-        $this->expectException(Error::class);
+        $this->expectException(\Cake\Datasource\Exception\RecordNotFoundException::class);
         $this->MailContentsService->copy($data);
     }
 
