@@ -311,13 +311,10 @@ class CustomEntriesControllerTest extends BcTestCase
         //存在しないcustom_table_id を指定した場合、
         $this->get('/baser/api/admin/bc-custom-content/custom_entries.json?custom_table_id=11&token=' . $this->accessToken);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals(
-            'データベース処理中にエラーが発生しました。Record not found in table `custom_tables`.',
-            $result->message
-        );
+        $this->assertEquals('データが見つかりません。', $result->message);
     }
 
     /**

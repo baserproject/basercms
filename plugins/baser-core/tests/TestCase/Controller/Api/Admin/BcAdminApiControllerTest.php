@@ -12,6 +12,12 @@
 namespace BaserCore\Test\TestCase\Controller\Api\Admin;
 
 use Cake\Event\Event;
+use BaserCore\Error\BcBadRequestException;
+use BaserCore\Error\BcException;
+use Cake\Core\Configure;
+use Cake\Datasource\Exception\InvalidPrimaryKeyException;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Http\Exception\ForbiddenException;
 use Authentication\Identity;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BaserCore\Test\Factory\UserFactory;
@@ -172,6 +178,60 @@ class BcAdminApiControllerTest extends BcTestCase
             putenv('USE_CORE_ADMIN_API=' . $original);
             $_ENV['USE_CORE_ADMIN_API'] = $original;
             $_SERVER['USE_CORE_ADMIN_API'] = $original;
+        }
+    }
+
+    /**
+     * test handleThrowable
+     *
+     * 例外の種類ごとに、応答のステータスコードとメッセージが決まること
+     * PHP・CakePHP・DB が出す例外の内部情報は、デバッグモードでない場合に応答へ含めないこと
+     */
+    public function test_handleThrowable()
+    {
+        $controller = new BcAdminApiController($this->getRequest());
+
+        // 存在しないデータは 404
+        $message = $this->execPrivateMethod($controller, 'handleThrowable', [new RecordNotFoundException('Record not found in table `contents`.')]);
+        $this->assertEquals(404, $controller->getResponse()->getStatusCode());
+        $this->assertEquals('データが見つかりません。', $message);
+        $message = $this->execPrivateMethod($controller, 'handleThrowable', [new InvalidPrimaryKeyException('Record not found in table `contents` with primary key `[NULL]`.')]);
+        $this->assertEquals(404, $controller->getResponse()->getStatusCode());
+        $this->assertEquals('データが見つかりません。', $message);
+
+        // 入力の誤りは 400 とし、メッセージを返す
+        $message = $this->execPrivateMethod($controller, 'handleThrowable', [new BcBadRequestException('ファイル名が不正です。')]);
+        $this->assertEquals(400, $controller->getResponse()->getStatusCode());
+        $this->assertEquals('ファイル名が不正です。', $message);
+
+        // HttpException はそのステータスコード
+        $message = $this->execPrivateMethod($controller, 'handleThrowable', [new ForbiddenException('権限がありません。')]);
+        $this->assertEquals(403, $controller->getResponse()->getStatusCode());
+        $this->assertEquals('権限がありません。', $message);
+
+        // BcException は 500 とし、baserCMS が書いたメッセージを返す
+        $message = $this->execPrivateMethod($controller, 'handleThrowable', [new BcException('同じ名前のファイルが既に存在します。')]);
+        $this->assertEquals(500, $controller->getResponse()->getStatusCode());
+        $this->assertEquals('データベース処理中にエラーが発生しました。同じ名前のファイルが既に存在します。', $message);
+
+        // それ以外は 500 とし、デバッグモードでない場合は例外メッセージを返さない
+        $debug = Configure::read('debug');
+        try {
+            Configure::write('debug', false);
+            $message = $this->execPrivateMethod($controller, 'handleThrowable', [new \TypeError('Argument #1 must be of type int, called in /var/www/html/src/Foo.php on line 1')]);
+            $this->assertEquals(500, $controller->getResponse()->getStatusCode());
+            $this->assertEquals('データベース処理中にエラーが発生しました。', $message);
+
+            // 前置きの文言を指定できること
+            $message = $this->execPrivateMethod($controller, 'handleThrowable', [new \InvalidArgumentException('Cannot convert value'), '処理中にエラーが発生しました。']);
+            $this->assertEquals('処理中にエラーが発生しました。', $message);
+
+            // デバッグモードの場合は例外メッセージを付ける
+            Configure::write('debug', true);
+            $message = $this->execPrivateMethod($controller, 'handleThrowable', [new \InvalidArgumentException('Cannot convert value')]);
+            $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value', $message);
+        } finally {
+            Configure::write('debug', $debug);
         }
     }
 }

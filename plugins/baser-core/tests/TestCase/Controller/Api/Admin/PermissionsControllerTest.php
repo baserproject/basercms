@@ -217,8 +217,9 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testUpdate_sort()
     {
+        // ID の指定がない場合は 404
         $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken);
-        $this->assertResponseFailure();
+        $this->assertResponseCode(404);
 
         $data = [
             'id' => 1,
