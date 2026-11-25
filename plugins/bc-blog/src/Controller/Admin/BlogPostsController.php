@@ -77,7 +77,7 @@ class BlogPostsController extends BlogAdminAppController
         if ($event->getResult()) return;
 
         $blogContentId = $this->request->getParam('pass.0');
-        if (!$blogContentId) throw new BcException(__d('baser_core', '不正なURLです。'));
+        if (!$blogContentId) throw new NotFoundException(__d('baser_core', '不正なURLです。'));
         // 数字以外の ID は int 型の引数に渡せず TypeError になるため、存在しないページとして扱う
         if (!ctype_digit((string)$blogContentId)) throw new NotFoundException(__d('baser_core', 'コンテンツデータが見つかりません。'));
         $blogContentId = (int)$blogContentId;
@@ -90,7 +90,7 @@ class BlogPostsController extends BlogAdminAppController
             $this->getRequest()
         );
 
-        if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
+        if (!$request) throw new NotFoundException(__d('baser_core', 'コンテンツデータが見つかりません。'));
 
         $this->setRequest($request);
 

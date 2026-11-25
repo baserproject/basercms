@@ -91,7 +91,7 @@ class BlogPostsControllerTest extends BcTestCase
 
         //$blogContentIdを指定しない場合。
         $this->expectExceptionMessage('不正なURLです。');
-        $this->expectException('BaserCore\Error\BcException');
+        $this->expectException('Cake\Http\Exception\NotFoundException');
         $event = new Event('Controller.beforeFilter', $this->BlogPostsController);
         $this->BlogPostsController->beforeFilter($event);
     }
@@ -102,7 +102,7 @@ class BlogPostsControllerTest extends BcTestCase
     {
         //コンテンツデータが存在しない場合。
         $this->expectExceptionMessage('コンテンツデータが見つかりません。');
-        $this->expectException('BaserCore\Error\BcException');
+        $this->expectException('Cake\Http\Exception\NotFoundException');
         $request = $this->getRequest('/baser/admin/bc-blog/blog_posts/index/1111');
         $request = $this->loginAdmin($request);
         $blogPosts = new BlogPostsController($request);
@@ -161,6 +161,12 @@ class BlogPostsControllerTest extends BcTestCase
         $this->assertResponseCode(302);
         // リダイレクトを確認
         $this->assertRedirect(['action' => 'index', 2]);
+
+        // ブログの ID がない場合、存在しないブログの場合は 404
+        $this->get('/baser/admin/bc-blog/blog_posts/');
+        $this->assertResponseCode(404);
+        $this->get('/baser/admin/bc-blog/blog_posts/index/1111');
+        $this->assertResponseCode(404);
     }
 
     /**
