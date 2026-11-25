@@ -12,6 +12,7 @@
 namespace BaserCore\Model\Table;
 
 use ArrayObject;
+use BaserCore\Error\BcBadRequestException;
 use Cake\Chronos\Chronos;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Utility\Hash;
@@ -323,6 +324,25 @@ class ContentsTable extends AppTable
      */
     public function beforeMarshal(EventInterface $event, ArrayObject $content, ArrayObject $options)
     {
+        // 入力チェックより前に ID を検索条件に使い、文字列を加工するため、ここで型を確かめる。
+        // 不正な値のまま進むと、型変換の例外や TypeError となる
+        $messages = [
+            'id' => __d('baser_core', 'コンテンツの ID に不正な値が指定されています。'),
+            'parent_id' => __d('baser_core', '親フォルダの ID に不正な値が指定されています。'),
+            'title' => __d('baser_core', 'タイトルに不正な値が指定されています。'),
+            'name' => __d('baser_core', '名前に不正な値が指定されています。'),
+        ];
+        foreach(['id', 'parent_id'] as $field) {
+            if (!isset($content[$field]) || $content[$field] === '') continue;
+            if (!is_scalar($content[$field]) || !ctype_digit((string)$content[$field])) {
+                throw new BcBadRequestException($messages[$field]);
+            }
+        }
+        foreach(['title', 'name'] as $field) {
+            if (isset($content[$field]) && !is_scalar($content[$field])) {
+                throw new BcBadRequestException($messages[$field]);
+            }
+        }
         // タイトルは強制的に255文字でカット
         if (!empty($content['title'])) {
             $content['title'] = mb_substr($content['title'], 0, 254, 'UTF-8');

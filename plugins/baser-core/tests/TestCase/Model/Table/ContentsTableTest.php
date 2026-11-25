@@ -11,6 +11,7 @@
 
 namespace BaserCore\Test\TestCase\Model\Table;
 
+use BaserCore\Error\BcBadRequestException;
 use ArrayObject;
 use BaserCore\Service\BcDatabaseService;
 use BaserCore\Service\ContentFoldersService;
@@ -162,9 +163,35 @@ class ContentsTableTest extends BcTestCase
      */
     public function testInvalidIdSupplied(): void
     {
-        // 数字以外の ID は例外とせず、入力エラーとする
-        $contents = $this->Contents->newEntity(['id' => 'aaa']);
-        $this->assertNotEmpty($contents->getError('id'));
+        // 数字以外の ID は、入力の誤りとして BcBadRequestException とする
+        $this->expectException(BcBadRequestException::class);
+        $this->expectExceptionMessage('コンテンツの ID に不正な値が指定されています。');
+        $this->Contents->newEntity(['id' => 'aaa']);
+    }
+
+    /**
+     * 親フォルダの ID・タイトル・名前に不正な値を指定した場合は BcBadRequestException とする
+     *
+     * @param array $data
+     * @param string $message
+     * @dataProvider invalidValueSuppliedDataProvider
+     */
+    public function testInvalidValueSupplied(array $data, string $message): void
+    {
+        $this->expectException(BcBadRequestException::class);
+        $this->expectExceptionMessage($message);
+        $this->Contents->newEntity($data);
+    }
+
+    public static function invalidValueSuppliedDataProvider(): array
+    {
+        return [
+            [['title' => 'test', 'parent_id' => "1'"], '親フォルダの ID に不正な値が指定されています。'],
+            [['title' => 'test', 'parent_id' => ['1']], '親フォルダの ID に不正な値が指定されています。'],
+            [['id' => 'abs(1)', 'name' => 'test'], 'コンテンツの ID に不正な値が指定されています。'],
+            [['title' => ['test']], 'タイトルに不正な値が指定されています。'],
+            [['title' => 'test', 'name' => ['test']], '名前に不正な値が指定されています。'],
+        ];
     }
 
 

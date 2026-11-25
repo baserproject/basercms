@@ -138,9 +138,10 @@ class ContentLinksControllerTest extends BcTestCase
             ]
         ];
         $this->post('/baser/api/admin/bc-content-link/content_links/edit/1.json?token=' . $this->accessToken, $data);
-        $this->assertResponseCode(500);
+        // 親フォルダの ID に数字以外を指定した場合は 400
+        $this->assertResponseCode(400);
         $result = json_decode((string)$this->_response->getBody());
-        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value `level` of type `string` to int', $result->message);
+        $this->assertEquals('親フォルダの ID に不正な値が指定されています。', $result->message);
 
     }
 
