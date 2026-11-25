@@ -13,11 +13,16 @@ namespace BaserCore\Controller\Api\Admin;
 use Authentication\Authenticator\JwtAuthenticator;
 use Authentication\Authenticator\SessionAuthenticator;
 use BaserCore\Controller\Api\BcApiController;
+use BaserCore\Error\BcBadRequestException;
 use BaserCore\Error\BcException;
 use BaserCore\Utility\BcContainerTrait;
 use Cake\Core\Configure;
+use Cake\Datasource\Exception\InvalidPrimaryKeyException;
+use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Event\EventInterface;
 use Cake\Http\Exception\ForbiddenException;
+use Cake\Http\Exception\HttpException;
+use Cake\ORM\Exception\PersistenceFailedException;
 use Cake\ORM\TableRegistry;
 use BaserCore\Annotation\UnitTest;
 use BaserCore\Annotation\NoTodo;
@@ -164,6 +169,62 @@ class BcAdminApiController extends BcApiController
             }
         }
         throw new BcException(__d('baser_core', 'BcPrefixAuth の userModel にユーザーの存在確認メソッドが存在しません。'));
+    }
+
+    /**
+     * 処理中に受け止めた例外から、応答のステータスコードを設定し、メッセージを返す
+     *
+     * - 存在しないデータ（RecordNotFoundException / InvalidPrimaryKeyException）は 404
+     * - 入力の誤り（BcBadRequestException / PersistenceFailedException）は 400
+     * - HttpException は、その例外のステータスコード
+     * - BcException は 500 とし、baserCMS が書いたメッセージをそのまま返す
+     * - それ以外（PHP・CakePHP・DB が出す例外）は 500 とし、ログに記録する。
+     *   例外メッセージにはサーバーのパスや SQL 等の内部情報が含まれるため、
+     *   デバッグモードでない場合は応答に含めない
+     *
+     * @param \Throwable $e
+     * @param string|null $prefix 500 の場合にメッセージの先頭に付ける文言
+     * @return string
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function handleThrowable(\Throwable $e, ?string $prefix = null): string
+    {
+        if ($e instanceof RecordNotFoundException || $e instanceof InvalidPrimaryKeyException) {
+            $this->setResponse($this->response->withStatus(404));
+            return __d('baser_core', 'データが見つかりません。');
+        }
+        if ($e instanceof BcBadRequestException) {
+            $this->setResponse($this->response->withStatus(400));
+            return $e->getMessage();
+        }
+        if ($e instanceof PersistenceFailedException) {
+            $this->setResponse($this->response->withStatus(400));
+            return __d('baser_core', '入力エラーです。内容を修正してください。');
+        }
+        if ($e instanceof HttpException) {
+            $this->setResponse($this->response->withStatus($e->getCode()));
+            return $e->getMessage();
+        }
+
+        $this->setResponse($this->response->withStatus(500));
+        if ($prefix === null) $prefix = __d('baser_core', 'データベース処理中にエラーが発生しました。');
+        if ($e instanceof BcException) {
+            return $prefix . $e->getMessage();
+        }
+        $this->log(sprintf(
+            "[%s] %s in %s on line %d\n%s",
+            get_class($e),
+            $e->getMessage(),
+            $e->getFile(),
+            $e->getLine(),
+            $e->getTraceAsString()
+        ));
+        if (Configure::read('debug')) {
+            return $prefix . $e->getMessage();
+        }
+        return $prefix;
     }
 
 }

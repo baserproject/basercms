@@ -252,8 +252,9 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     public function testRename()
     {
         BlogContentFactory::make(['id' => 31, 'description' => ''])->persist();
+        // ID の指定がない場合は 404
         $this->patch("/baser/api/admin/baser-core/contents/rename.json?token=" . $this->accessToken);
-        $this->assertResponseFailure();
+        $this->assertResponseCode(404);
         $data = ['id' => 6, 'title' => 'testRename'];
         $this->patch("/baser/api/admin/baser-core/contents/rename.json?token=" . $this->accessToken, $data);
         $this->assertResponseOk();
@@ -321,7 +322,8 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         // postDataがない場合
         $this->patch("/baser/api/admin/baser-core/contents/move.json?token=" . $this->accessToken);
-        $this->assertEquals('データベース処理中にエラーが発生しました。Record not found in table `contents` with primary key `[NULL]`.', json_decode($this->_response->getBody())->message);
+        $this->assertResponseCode(404);
+        $this->assertEquals('データが見つかりません。', json_decode($this->_response->getBody())->message);
         // サービス1をサービス2の後ろに移動する場合
         $title = 'サービス１';
         $originEntity = $this->ContentsService->getIndex(['title' => $title])->first();
