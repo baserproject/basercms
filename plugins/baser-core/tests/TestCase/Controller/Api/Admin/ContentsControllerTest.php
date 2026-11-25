@@ -284,6 +284,30 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertResponseOk();
         $this->assertNotEmpty(json_decode($this->_response->getBody())->content);
         $this->assertEquals("テストエイリアス を作成しました。", json_decode($this->_response->getBody())->message);
+
+        // content が配列でない場合、エイリアス元の ID に数字以外を指定した場合は 400
+        $this->post("/baser/api/admin/baser-core/contents/add_alias.json?token=" . $this->accessToken, ['content' => 'test']);
+        $this->assertResponseCode(400);
+        $this->assertEquals('content を指定してください。', json_decode($this->_response->getBody())->message);
+        $data['content']['alias_id'] = 'abs(1)';
+        $this->post("/baser/api/admin/baser-core/contents/add_alias.json?token=" . $this->accessToken, $data);
+        $this->assertResponseCode(400);
+        $this->assertEquals('content.alias_id に不正な値が指定されています。', json_decode($this->_response->getBody())->message);
+    }
+
+    /**
+     * testChange_status_invalidValue
+     *
+     * ID に数字以外、status に許可されていない値を指定した場合は 400
+     */
+    public function testChange_status_invalidValue()
+    {
+        $this->patch("/baser/api/admin/baser-core/contents/change_status.json?token=" . $this->accessToken, ['id' => "1'", 'status' => 'publish']);
+        $this->assertResponseCode(400);
+        $this->assertEquals('id に不正な値が指定されています。', json_decode($this->_response->getBody())->message);
+        $this->patch("/baser/api/admin/baser-core/contents/change_status.json?token=" . $this->accessToken, ['id' => 1, 'status' => 'delete']);
+        $this->assertResponseCode(400);
+        $this->assertEquals('status に不正な値が指定されています。', json_decode($this->_response->getBody())->message);
     }
 
     /**
@@ -320,10 +344,16 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
      */
     public function testMove()
     {
-        // postDataがない場合
+        // postDataがない場合は 400
         $this->patch("/baser/api/admin/baser-core/contents/move.json?token=" . $this->accessToken);
-        $this->assertResponseCode(404);
-        $this->assertEquals('データが見つかりません。', json_decode($this->_response->getBody())->message);
+        $this->assertResponseCode(400);
+        $this->assertEquals('origin を指定してください。', json_decode($this->_response->getBody())->message);
+        // 移動元の ID に数字以外を指定した場合は 400
+        $this->patch("/baser/api/admin/baser-core/contents/move.json?token=" . $this->accessToken, [
+            'origin' => ['id' => "1'"], 'target' => ['parentId' => 1],
+        ]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('origin.id に不正な値が指定されています。', json_decode($this->_response->getBody())->message);
         // サービス1をサービス2の後ろに移動する場合
         $title = 'サービス１';
         $originEntity = $this->ContentsService->getIndex(['title' => $title])->first();

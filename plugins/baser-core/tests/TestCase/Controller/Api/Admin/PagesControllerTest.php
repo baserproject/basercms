@@ -147,6 +147,19 @@ class PagesControllerTest extends BcTestCase
         $this->post("/baser/api/admin/baser-core/pages/copy/2.json?token=". $this->accessToken, $data);
         $this->assertResponseSuccess();
         $this->assertFalse($this->PagesService->getIndex(['title' => $data['title']])->all()->isEmpty());
+
+        // コピー元・親フォルダの ID に数字以外を指定した場合、タイトルが文字列でない場合は 400
+        foreach([
+            ['entity_id', "2'", 'entity_id に不正な値が指定されています。'],
+            ['parent_id', null, 'parent_id を指定してください。'],
+            ['title', ['hoge'], 'title に不正な値が指定されています。'],
+        ] as [$field, $value, $message]) {
+            $invalid = $data;
+            $invalid[$field] = $value;
+            $this->post("/baser/api/admin/baser-core/pages/copy.json?token=". $this->accessToken, $invalid);
+            $this->assertResponseCode(400);
+            $this->assertEquals($message, json_decode($this->_response->getBody())->message);
+        }
     }
 
     public function test_index()

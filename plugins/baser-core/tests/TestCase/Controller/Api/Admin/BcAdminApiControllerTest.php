@@ -236,6 +236,50 @@ class BcAdminApiControllerTest extends BcTestCase
     }
 
     /**
+     * test getIntegerData
+     *
+     * 数字の項目を取得し、数字以外・配列・必須で未指定の場合は BcBadRequestException とすること
+     */
+    public function test_getIntegerData()
+    {
+        $controller = new BcAdminApiController($this->getRequest('/', [
+            'id' => '3', 'empty' => '', 'invalid' => "1'", 'array' => ['1'], 'origin' => ['id' => 5],
+        ], 'post'));
+        $this->assertSame(3, $this->execPrivateMethod($controller, 'getIntegerData', ['id']));
+        $this->assertSame(5, $this->execPrivateMethod($controller, 'getIntegerData', ['origin.id']));
+        $this->assertNull($this->execPrivateMethod($controller, 'getIntegerData', ['empty', false]));
+        $this->assertNull($this->execPrivateMethod($controller, 'getIntegerData', ['none', false]));
+        foreach([
+            ['none', 'none を指定してください。'],
+            ['empty', 'empty を指定してください。'],
+            ['invalid', 'invalid に不正な値が指定されています。'],
+            ['array', 'array に不正な値が指定されています。'],
+        ] as [$name, $message]) {
+            try {
+                $this->execPrivateMethod($controller, 'getIntegerData', [$name]);
+                $this->fail($name);
+            } catch (BcBadRequestException $e) {
+                $this->assertEquals($message, $e->getMessage());
+            }
+        }
+    }
+
+    /**
+     * test assertScalarData
+     *
+     * 配列などスカラー値以外の場合は BcBadRequestException とすること
+     */
+    public function test_assertScalarData()
+    {
+        $controller = new BcAdminApiController($this->getRequest('/', ['title' => 'test', 'array' => ['test']], 'post'));
+        $this->execPrivateMethod($controller, 'assertScalarData', ['title']);
+        $this->execPrivateMethod($controller, 'assertScalarData', ['none']);
+        $this->expectException(BcBadRequestException::class);
+        $this->expectExceptionMessage('array に不正な値が指定されています。');
+        $this->execPrivateMethod($controller, 'assertScalarData', ['array']);
+    }
+
+    /**
      * test validateBatchRequest
      *
      * 一括処理の処理名・対象が不正な場合は 400 とメッセージを設定して false を返すこと

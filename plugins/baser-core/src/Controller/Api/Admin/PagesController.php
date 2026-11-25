@@ -200,6 +200,10 @@ class PagesController extends BcAdminApiController
         $page = $errors = null;
         try {
             /* @var PagesService $service */
+            $this->getIntegerData('entity_id');
+            $this->getIntegerData('parent_id');
+            $this->getIntegerData('site_id', false);
+            $this->assertScalarData('title');
             $page = $service->copy($this->request->getData());
             $message = __d('baser_core', '固定ページのコピー「{0}」を追加しました。', $page->content->title);
             $this->BcMessage->setSuccess($message, true, false);

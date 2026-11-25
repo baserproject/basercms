@@ -265,4 +265,52 @@ class BcAdminApiController extends BcApiController
         return $prefix;
     }
 
+    /**
+     * 送信値から数字の項目を取得する
+     *
+     * 数字以外の値や配列が送られた場合、必須で未指定の場合は BcBadRequestException とする。
+     * 数字以外の値のまま検索条件やサービスの int 型の引数に渡すと、型変換の例外や TypeError となるため
+     *
+     * @param string $name 項目名（ドット区切りで階層を指定できる）
+     * @param bool $required 必須かどうか
+     * @return int|null
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function getIntegerData(string $name, bool $required = true): ?int
+    {
+        $value = $this->getRequest()->getData($name);
+        if ($value === null || $value === '') {
+            if ($required) {
+                throw new BcBadRequestException(__d('baser_core', '{0} を指定してください。', $name));
+            }
+            return null;
+        }
+        if (!is_scalar($value) || !ctype_digit((string)$value)) {
+            throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', $name));
+        }
+        return (int)$value;
+    }
+
+    /**
+     * 送信値の項目が文字列（スカラー値）かどうかを確かめる
+     *
+     * 配列などが送られた場合は BcBadRequestException とする。
+     * 文字列として加工する処理に配列を渡すと TypeError となるため
+     *
+     * @param string $name 項目名（ドット区切りで階層を指定できる）
+     * @return void
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function assertScalarData(string $name): void
+    {
+        $value = $this->getRequest()->getData($name);
+        if ($value !== null && !is_scalar($value)) {
+            throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', $name));
+        }
+    }
+
 }
