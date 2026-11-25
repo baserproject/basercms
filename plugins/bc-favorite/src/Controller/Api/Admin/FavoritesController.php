@@ -197,8 +197,8 @@ class FavoritesController extends BcAdminApiController
         try {
             $user = BcUtil::loginUser();
             $result = $service->changeSort(
-                $this->request->getData('id'),
-                $this->request->getData('offset'),
+                $this->getIntegerData('id'),
+                $this->getIntegerData('offset', true, true),
                 ['Favorites.user_id' => $user->id]
             );
             if ($result) BcUtil::clearAllCache();

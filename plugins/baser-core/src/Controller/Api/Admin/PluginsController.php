@@ -282,8 +282,10 @@ class PluginsController extends BcAdminApiController
         $this->request->allowMethod(['post']);
         $plugin = null;
         try {
-            $plugin = $service->get($this->request->getData('id'));
-            if (!$service->changePriority($plugin->id, $this->request->getData('offset'))) {
+            $id = $this->getIntegerData('id');
+            $offset = $this->getIntegerData('offset', true, true);
+            $plugin = $service->get($id);
+            if (!$service->changePriority($plugin->id, $offset)) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {

@@ -270,6 +270,15 @@ class MailFieldsControllerTest extends BcTestCase
         // 戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals($result->message, 'メールフィールド「性」の並び替えを更新しました。');
+
+        // 数字以外の値の場合は 400
+        $this->post("/baser/api/admin/bc-mail/mail_fields/update_sort/1.json?token=" . $this->accessToken, ['id' => 1, 'offset' => '1.5']);
+        $this->assertResponseCode(400);
+        $this->assertEquals('offset に不正な値が指定されています。', json_decode((string)$this->_response->getBody())->message);
+
+        // 存在しない ID の場合は 404
+        $this->post("/baser/api/admin/bc-mail/mail_fields/update_sort/1.json?token=" . $this->accessToken, ['id' => 9999, 'offset' => 1]);
+        $this->assertResponseCode(404);
     }
 
     /**

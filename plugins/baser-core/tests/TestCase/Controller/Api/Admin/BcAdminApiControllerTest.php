@@ -243,9 +243,11 @@ class BcAdminApiControllerTest extends BcTestCase
     public function test_getIntegerData()
     {
         $controller = new BcAdminApiController($this->getRequest('/', [
-            'id' => '3', 'empty' => '', 'invalid' => "1'", 'array' => ['1'], 'origin' => ['id' => 5],
+            'id' => '3', 'empty' => '', 'invalid' => "1'", 'array' => ['1'], 'origin' => ['id' => 5], 'negative' => '-2',
         ], 'post'));
         $this->assertSame(3, $this->execPrivateMethod($controller, 'getIntegerData', ['id']));
+        $this->assertSame(-2, $this->execPrivateMethod($controller, 'getIntegerData', ['negative', true, true]));
+        $this->assertSame(3, $this->execPrivateMethod($controller, 'getIntegerData', ['id', true, true]));
         $this->assertSame(5, $this->execPrivateMethod($controller, 'getIntegerData', ['origin.id']));
         $this->assertNull($this->execPrivateMethod($controller, 'getIntegerData', ['empty', false]));
         $this->assertNull($this->execPrivateMethod($controller, 'getIntegerData', ['none', false]));
@@ -254,6 +256,7 @@ class BcAdminApiControllerTest extends BcTestCase
             ['empty', 'empty を指定してください。'],
             ['invalid', 'invalid に不正な値が指定されています。'],
             ['array', 'array に不正な値が指定されています。'],
+            ['negative', 'negative に不正な値が指定されています。'],
         ] as [$name, $message]) {
             try {
                 $this->execPrivateMethod($controller, 'getIntegerData', [$name]);

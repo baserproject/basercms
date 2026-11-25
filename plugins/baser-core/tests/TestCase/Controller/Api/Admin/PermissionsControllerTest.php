@@ -217,8 +217,19 @@ class PermissionsControllerTest extends BcTestCase
      */
     public function testUpdate_sort()
     {
-        // ID の指定がない場合は 404
+        // ID の指定がない場合は 400
         $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken);
+        $this->assertResponseCode(400);
+        $this->assertEquals('id を指定してください。', json_decode((string)$this->_response->getBody())->message);
+        // 数字以外の値の場合は 400
+        $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken, ['id' => 1, 'offset' => "1'"]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('offset に不正な値が指定されています。', json_decode((string)$this->_response->getBody())->message);
+        $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?permission_group_id=1%27&token=' . $this->accessToken, ['id' => 1, 'offset' => 1]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('permission_group_id に不正な値が指定されています。', json_decode((string)$this->_response->getBody())->message);
+        // 存在しない ID の場合は 404
+        $this->post('/baser/api/admin/baser-core/permissions/update_sort/2.json?token=' . $this->accessToken, ['id' => 9999, 'offset' => 1]);
         $this->assertResponseCode(404);
 
         $data = [

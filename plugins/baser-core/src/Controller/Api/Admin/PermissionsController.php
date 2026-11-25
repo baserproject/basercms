@@ -13,6 +13,7 @@ namespace BaserCore\Controller\Api\Admin;
 
 use BaserCore\Service\PermissionsService;
 use BaserCore\Service\PermissionsServiceInterface;
+use BaserCore\Error\BcBadRequestException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
@@ -267,13 +268,19 @@ class PermissionsController extends BcAdminApiController
         $conditions = [
             'user_group_id' => $userGroupId,
         ];
-        if ($this->request->getQuery('permission_group_id')) {
-            $conditions['permission_group_id'] = $this->request->getQuery('permission_group_id');
-        }
         $permission = null;
         try {
-            $permission = $service->get($this->request->getData('id'));
-            if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
+            $permissionGroupId = $this->request->getQuery('permission_group_id');
+            if ($permissionGroupId) {
+                if (!is_scalar($permissionGroupId) || !ctype_digit((string)$permissionGroupId)) {
+                    throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', 'permission_group_id'));
+                }
+                $conditions['permission_group_id'] = $permissionGroupId;
+            }
+            $id = $this->getIntegerData('id');
+            $offset = $this->getIntegerData('offset', true, true);
+            $permission = $service->get($id);
+            if (!$service->changeSort($id, $offset, $conditions)) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {

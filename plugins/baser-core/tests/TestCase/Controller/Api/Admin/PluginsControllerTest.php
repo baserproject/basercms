@@ -259,6 +259,28 @@ class PluginsControllerTest extends BcTestCase
         $this->assertResponseOk();
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('プラグイン「BcBlog」の並び替えを更新しました。', $result->message);
+
+        // 負の移動量は受け付ける
+        $this->post('/baser/api/admin/baser-core/plugins/update_sort.json?token=' . $this->accessToken, [
+            'id' => 1,
+            'offset' => -1
+        ]);
+        $this->assertResponseOk();
+
+        // 数字以外の値の場合は 400
+        $this->post('/baser/api/admin/baser-core/plugins/update_sort.json?token=' . $this->accessToken, [
+            'id' => ['1'],
+            'offset' => 1
+        ]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('id に不正な値が指定されています。', json_decode((string)$this->_response->getBody())->message);
+
+        // 存在しない ID の場合は 404
+        $this->post('/baser/api/admin/baser-core/plugins/update_sort.json?token=' . $this->accessToken, [
+            'id' => 9999,
+            'offset' => 1
+        ]);
+        $this->assertResponseCode(404);
     }
 
     /**

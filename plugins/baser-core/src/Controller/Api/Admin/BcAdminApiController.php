@@ -273,12 +273,13 @@ class BcAdminApiController extends BcApiController
      *
      * @param string $name 項目名（ドット区切りで階層を指定できる）
      * @param bool $required 必須かどうか
+     * @param bool $allowNegative 負の数を許可するかどうか（並び替えの移動量など）
      * @return int|null
      * @checked
      * @noTodo
      * @unitTest
      */
-    protected function getIntegerData(string $name, bool $required = true): ?int
+    protected function getIntegerData(string $name, bool $required = true, bool $allowNegative = false): ?int
     {
         $value = $this->getRequest()->getData($name);
         if ($value === null || $value === '') {
@@ -287,7 +288,8 @@ class BcAdminApiController extends BcApiController
             }
             return null;
         }
-        if (!is_scalar($value) || !ctype_digit((string)$value)) {
+        $pattern = $allowNegative? '/\A-?[0-9]+\z/' : '/\A[0-9]+\z/';
+        if (!is_scalar($value) || !preg_match($pattern, (string)$value)) {
             throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', $name));
         }
         return (int)$value;
