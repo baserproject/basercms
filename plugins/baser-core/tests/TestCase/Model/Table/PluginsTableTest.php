@@ -94,6 +94,13 @@ class PluginsTableTest extends BcTestCase
         // インストール画面の初期値は「管理ユーザーのみ利用」
         $this->assertEquals(0, $plugin->permission);
         $this->assertEquals(0, $this->Plugins->getPluginConfig('BcPluginSample')->permission);
+
+        // 名前が51文字以上でも名前を保持し、保存はできないこと
+        $longName = 'BcThemeSample' . str_repeat('Copy', 10);
+        $plugin = $this->Plugins->getPluginConfig($longName);
+        $this->assertEquals($longName, $plugin->name);
+        $this->assertNotEmpty($plugin->getError('name'));
+        $this->assertFalse($this->Plugins->save($plugin));
     }
 
     /**

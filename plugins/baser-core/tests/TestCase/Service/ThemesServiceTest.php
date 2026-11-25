@@ -236,6 +236,13 @@ class ThemesServiceTest extends \BaserCore\TestSuite\BcTestCase
         $this->assertTrue(str_contains($data, 'namespace BcFrontCopy;'), 'namespace の書き換えが確認できませんでした。');
 
         $this->ThemesService->delete('BcFrontCopy');
+
+        // コピー後の名前が50文字を超える場合はコピーしないこと
+        $longName = str_repeat('A', 47);
+        mkdir(BASER_THEMES . $longName);
+        $this->assertFalse($this->ThemesService->copy($longName));
+        $this->assertFalse(is_dir(BASER_THEMES . $longName . 'Copy'));
+        rmdir(BASER_THEMES . $longName);
     }
     /**
      * test delete
