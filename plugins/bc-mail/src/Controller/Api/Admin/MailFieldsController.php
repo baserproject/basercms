@@ -86,8 +86,10 @@ class MailFieldsController extends BcAdminApiController
         ];
         $entity = null;
         try {
-            $entity = $service->get($this->request->getData('id'));
-            if (!$service->changeSort($this->request->getData('id'), $this->request->getData('offset'), $conditions)) {
+            $id = $this->getIntegerData('id');
+            $offset = $this->getIntegerData('offset', true, true);
+            $entity = $service->get($id);
+            if (!$service->changeSort($id, $offset, $conditions)) {
                 $this->setResponse($this->response->withStatus(400));
                 $message = __d('baser_core', '一度リロードしてから再実行してみてください。');
             } else {

@@ -341,6 +341,21 @@ class WidgetAreasControllerTest extends BcTestCase
         $this->assertEquals('ウィジェットエリア「標準サイドバー」の並び順を更新しました。', $result->message);
         //ウィジェットエリア名を更新できるか確認すること
         $this->assertEquals('標準サイドバー', $result->widgetArea->name);
+
+        // 未指定・不正な値の場合は 400
+        foreach([
+            [[], 'sorted_ids を指定してください。'],
+            [['sorted_ids' => ['1']], 'sorted_ids に不正な値が指定されています。'],
+            [['sorted_ids' => "1,2'"], 'sorted_ids に不正な値が指定されています。'],
+        ] as [$data, $message]) {
+            $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_sort/1.json?token=" . $this->accessToken, $data);
+            $this->assertResponseCode(400);
+            $this->assertEquals($message, json_decode((string)$this->_response->getBody())->message);
+        }
+
+        // 存在しないウィジェットエリアの場合は 404
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_sort/9999.json?token=" . $this->accessToken, ['sorted_ids' => '1,2']);
+        $this->assertResponseCode(404);
     }
 
     /**

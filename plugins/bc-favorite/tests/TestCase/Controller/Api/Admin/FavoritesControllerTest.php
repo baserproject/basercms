@@ -250,6 +250,19 @@ class FavoritesControllerTest extends BcTestCase
             'offset' => 1
         ]);
         $this->assertResponseOk();
+
+        // 数字以外の値・未指定の場合は 400
+        $this->post('/baser/api/admin/bc-favorite/favorites/change_sort.json?token=' . $this->accessToken, [
+            'id' => "1'",
+            'offset' => 1
+        ]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('id に不正な値が指定されています。', json_decode((string)$this->_response->getBody())->message);
+        $this->post('/baser/api/admin/bc-favorite/favorites/change_sort.json?token=' . $this->accessToken, [
+            'id' => 1
+        ]);
+        $this->assertResponseCode(400);
+        $this->assertEquals('offset を指定してください。', json_decode((string)$this->_response->getBody())->message);
     }
 
     /**

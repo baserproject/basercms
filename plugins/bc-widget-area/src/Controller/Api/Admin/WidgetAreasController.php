@@ -14,6 +14,7 @@ namespace BcWidgetArea\Controller\Api\Admin;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
 use BcWidgetArea\Service\WidgetAreasService;
 use BcWidgetArea\Service\WidgetAreasServiceInterface;
+use BaserCore\Error\BcBadRequestException;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use BaserCore\Annotation\UnitTest;
@@ -289,6 +290,13 @@ class WidgetAreasController extends BcAdminApiController
         $this->getRequest()->allowMethod(['post', 'put']);
         $entity = $errors = null;
         try {
+            $sortedIds = $this->getRequest()->getData('sorted_ids');
+            if ($sortedIds === null || $sortedIds === '') {
+                throw new BcBadRequestException(__d('baser_core', '{0} を指定してください。', 'sorted_ids'));
+            }
+            if (!is_scalar($sortedIds) || !preg_match('/\A[0-9]+(,[0-9]+)*\z/', (string)$sortedIds)) {
+                throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', 'sorted_ids'));
+            }
             $entity = $service->updateSort($widgetAreaId, $this->getRequest()->getData());
             $message = __d('baser_core', 'ウィジェットエリア「{0}」の並び順を更新しました。', $entity->name);
             $this->BcMessage->setSuccess($message, true, false);
