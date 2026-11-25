@@ -234,4 +234,37 @@ class BcAdminApiControllerTest extends BcTestCase
             Configure::write('debug', $debug);
         }
     }
+
+    /**
+     * test validateBatchRequest
+     *
+     * 一括処理の処理名・対象が不正な場合は 400 とメッセージを設定して false を返すこと
+     */
+    public function test_validateBatchRequest()
+    {
+        $allowMethod = ['publish' => '公開', 'delete' => '削除'];
+        $cases = [
+            // [送信値, ID を対象とするか, 期待する結果, 期待するメッセージ]
+            [['batch' => 'delete', 'batch_targets' => [1, '2']], true, true, null],
+            [['batch' => 'add', 'batch_targets' => [1]], true, false, '一括処理の処理内容が不正です。'],
+            [['batch' => ['delete'], 'batch_targets' => [1]], true, false, '一括処理の処理内容が不正です。'],
+            [['batch_targets' => [1]], true, false, '一括処理の処理内容が不正です。'],
+            [['batch' => 'delete'], true, false, '一括処理の対象を指定してください。'],
+            [['batch' => 'delete', 'batch_targets' => '1'], true, false, '一括処理の対象を指定してください。'],
+            [['batch' => 'delete', 'batch_targets' => []], true, false, '一括処理の対象を指定してください。'],
+            [['batch' => 'delete', 'batch_targets' => [1, "1'"]], true, false, '一括処理の対象に不正な値が含まれています。'],
+            [['batch' => 'delete', 'batch_targets' => [['1']]], true, false, '一括処理の対象に不正な値が含まれています。'],
+            // ID 以外（パスなど）を対象とする場合は、数字以外も受け付ける
+            [['batch' => 'delete', 'batch_targets' => ['/path/to/file']], false, true, null],
+            [['batch' => 'delete', 'batch_targets' => ['']], false, false, '一括処理の対象に不正な値が含まれています。'],
+        ];
+        foreach($cases as [$data, $integerTargets, $expected, $expectedMessage]) {
+            $controller = new BcAdminApiController($this->getRequest('/', $data, 'post'));
+            $result = $this->execPrivateMethod($controller, 'validateBatchRequest', [$allowMethod, $integerTargets]);
+            $this->assertSame($expected, $result, json_encode($data));
+            if ($expected) continue;
+            $this->assertEquals(400, $controller->getResponse()->getStatusCode());
+            $this->assertEquals($expectedMessage, $controller->viewBuilder()->getVar('message'));
+        }
+    }
 }

@@ -332,12 +332,8 @@ class BlogPostsController extends BcAdminApiController
             'publish' => __d('baser_core', '公開'),
             'unpublish' => __d('baser_core', '非公開に')
         ];
+        if (!$this->validateBatchRequest($allowMethod)) return;
         $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
         $targets = $this->getRequest()->getData('batch_targets');
         try {
             $names = $service->getTitlesById($targets);

@@ -39,12 +39,8 @@ class BlogCategoriesController extends BcAdminApiController
         $allowMethod = [
             'delete' => '削除'
         ];
+        if (!$this->validateBatchRequest($allowMethod)) return;
         $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
         try {
             $targets = $this->getRequest()->getData('batch_targets');
             $service->batch($method, $targets);

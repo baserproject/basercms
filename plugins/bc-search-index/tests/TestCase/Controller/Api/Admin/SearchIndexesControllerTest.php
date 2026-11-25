@@ -167,7 +167,7 @@ class SearchIndexesControllerTest extends BcTestCase
     public function testBatch()
     {
         $this->post('/baser/api/admin/bc-search-index/search_indexes/batch.json?token=' . $this->accessToken, []);
-        $this->assertResponseFailure();
+        $this->assertResponseCode(400);
 
         SearchIndexFactory::make(['id' => 1, 'title' => 'test data Batch 1', 'type' => 'admin', 'site_id' => 10], 1)->persist();
         SearchIndexFactory::make(['id' => 2, 'title' => 'test data Batch 2', 'type' => 'admin', 'site_id' => 10], 1)->persist();

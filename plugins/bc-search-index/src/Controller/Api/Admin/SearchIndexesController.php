@@ -85,13 +85,8 @@ class SearchIndexesController extends BcAdminApiController
         $allowMethod = [
             'delete' => __d('baser_core', '削除')
         ];
-        // PHP 8.5 で null を配列オフセットに使うのは非推奨のため空文字に変換する
-        $method = $this->getRequest()->getData('batch') ?? '';
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
+        if (!$this->validateBatchRequest($allowMethod)) return;
+        $method = $this->getRequest()->getData('batch');
         try {
             $service->batch($method, $this->getRequest()->getData('batch_targets'));
             $this->BcMessage->setSuccess(
