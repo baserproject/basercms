@@ -141,6 +141,16 @@ class UploaderFilesControllerTest extends BcTestCase
         $this->assertEquals($result->message, 'アップロードファイル「social_new.jpg」を更新しました。');
         //値が変更されるか確認
         $this->assertEquals($result->uploaderFile->alt, 'test edit');
+
+        // ファイル名・公開開始日時が不正な場合は 400 とし、理由を返す
+        $this->post("/baser/api/admin/bc-uploader/uploader_files/edit/1.json?token=" . $this->accessToken, ['name' => '../test.jpg']);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ファイル名が不正です。', $result->message);
+        $this->post("/baser/api/admin/bc-uploader/uploader_files/edit/1.json?token=" . $this->accessToken, ['publish_begin' => "1'"]);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('公開開始日時が不正です。', $result->message);
     }
 
     /**
