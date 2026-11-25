@@ -230,7 +230,7 @@ class BlogCategoriesControllerTest extends BcTestCase
             'batch' => 'new',
             'batch_targets' => [1, 2]
         ]);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
     }
 
     /**

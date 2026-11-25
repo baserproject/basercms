@@ -356,7 +356,7 @@ class ContentsControllerTest extends \BaserCore\TestSuite\BcTestCase
     {
         // 空データ送信
         $this->post('/baser/api/admin/baser-core/contents/batch.json?token=' . $this->accessToken, []);
-        $this->assertResponseFailure();
+        $this->assertResponseCode(400);
         // delete
         $data = [
             'batch' => 'delete',
