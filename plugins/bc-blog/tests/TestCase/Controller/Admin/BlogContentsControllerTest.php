@@ -105,7 +105,8 @@ class BlogContentsControllerTest extends BcTestCase
         $this->enableSecurityToken();
         $this->enableCsrfToken();
         //データを作成
-        ContentFactory::make(['plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1, 'lft' => 1, 'rght' => 2])->persist();
+        ContentFactory::make(['id' => 1, 'plugin' => 'BaserCore', 'type' => 'ContentFolder', 'entity_id' => 1, 'site_id' => 1, 'parent_id' => null, 'name' => '', 'url' => '/', 'site_root' => true, 'lft' => 1, 'rght' => 4])->persist();
+        ContentFactory::make(['id' => 2, 'plugin' => 'BcBlog', 'type' => 'BlogContent', 'entity_id' => 1, 'site_id' => 1, 'parent_id' => 1, 'name' => 'blog', 'url' => '/blog/', 'lft' => 2, 'rght' => 3])->persist();
         BlogContentFactory::make([
             'id' => '1',
             'description' => 'test'
@@ -124,6 +125,13 @@ class BlogContentsControllerTest extends BcTestCase
         //異常系実行
         $this->post("/baser/admin/bc-blog/blog_contents/edit/199", $data);
         $this->assertResponseCode(404);
+
+        // コンテンツの ID に数字以外を送っても 500 にならず、入力エラーとして編集画面を表示すること
+        $data['content']['id'] = 'abs(1)';
+        $data['description'] = 'test invalid id';
+        $this->post("/baser/admin/bc-blog/blog_contents/edit/1", $data);
+        $this->assertResponseCode(200);
+        $this->assertEquals('test edit', BlogContentFactory::get(1)['description']);
     }
 
     /**

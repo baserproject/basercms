@@ -260,6 +260,10 @@ class BcUploadBehaviorTest extends BcTestCase
         $this->loadFixtureScenario(ContentsScenario::class);
         $result = $this->BcUploadBehavior->getOldEntity(1);
         $this->assertEmpty($result->name);
+
+        // 数字以外の ID は例外とせず null を返す
+        $this->assertNull($this->BcUploadBehavior->getOldEntity('abs(1)'));
+        $this->assertNull($this->BcUploadBehavior->getOldEntity("1'"));
     }
 
     /**

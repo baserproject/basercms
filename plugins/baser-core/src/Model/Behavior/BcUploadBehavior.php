@@ -354,6 +354,8 @@ class BcUploadBehavior extends Behavior
      */
     public function getOldEntity($id)
     {
+        // 数字以外の ID は検索時に型変換の例外となるため、データなしとして扱う
+        if (filter_var($id, FILTER_VALIDATE_INT) === false) return null;
         $table = $this->table();
         $query = $table->find()->where([$table->getAlias() . '.id' => $id]);
         if ($table instanceof \BaserCore\Model\Table\ContentsTable) {
