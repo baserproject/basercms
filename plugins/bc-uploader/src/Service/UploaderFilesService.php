@@ -14,7 +14,9 @@ namespace BcUploader\Service;
 use BaserCore\Annotation\NoTodo;
 use BaserCore\Annotation\Checked;
 use BaserCore\Annotation\UnitTest;
+use BaserCore\Error\BcBadRequestException;
 use BaserCore\Error\BcException;
+use Psr\Http\Message\UploadedFileInterface;
 use BaserCore\Utility\BcContainerTrait;
 use BaserCore\Utility\BcFileUploader;
 use BaserCore\Utility\BcUtil;
@@ -253,9 +255,12 @@ class UploaderFilesService implements UploaderFilesServiceInterface
         }
         if(!empty($postData['overwrite']) && !empty($postData['file'])) {
             $file = $postData['file'];
+            if (!($file instanceof UploadedFileInterface)) {
+                throw new BcBadRequestException(__d('baser_core', 'ファイルが不正です。'));
+            }
             $fileError = $file->getError();
             if ($fileError === UPLOAD_ERR_INI_SIZE) {
-                throw new BcException(__d('baser_core',
+                throw new BcBadRequestException(__d('baser_core',
                     '送信できるデータ量を超えています。 {0} 以内のデータを送信してください。',
                     [ini_get('upload_max_filesize')]
                 ));
@@ -265,11 +270,19 @@ class UploaderFilesService implements UploaderFilesServiceInterface
             $postData['name'] = new UploadedFile($file->getStream(), $file->getSize(), $file->getError(), $name, $file->getClientMediaType());
             $postData['id'] = $entity->id;
         }
-        if (!empty($postData['publish_begin'])) {
-            $postData['publish_begin'] = new \Cake\I18n\DateTime($postData['publish_begin']);
-        }
-        if (!empty($postData['publish_end'])) {
-            $postData['publish_end'] = new \Cake\I18n\DateTime($postData['publish_end']);
+        foreach([
+            'publish_begin' => __d('baser_core', '公開開始日時が不正です。'),
+            'publish_end' => __d('baser_core', '公開終了日時が不正です。'),
+        ] as $field => $message) {
+            if (empty($postData[$field])) continue;
+            try {
+                if (!is_string($postData[$field]) && !($postData[$field] instanceof \DateTimeInterface)) {
+                    throw new \InvalidArgumentException();
+                }
+                $postData[$field] = new \Cake\I18n\DateTime($postData[$field]);
+            } catch (\Exception) {
+                throw new BcBadRequestException($message);
+            }
         }
         // 文字列で送信された name（ファイル名の変更）は、ファイル名として妥当で、かつ他のレコードで
         // 使われていないものに限定する。任意の name を保存できると、beforeSave のリネームや削除時の
@@ -278,13 +291,13 @@ class UploaderFilesService implements UploaderFilesServiceInterface
             $name = (string)$postData['name'];
             if ($name !== (string)$entity->name) {
                 if (!BcFileUploader::isValidFileName($name)) {
-                    throw new BcException(__d('baser_core', 'ファイル名が不正です。'));
+                    throw new BcBadRequestException(__d('baser_core', 'ファイル名が不正です。'));
                 }
                 $exists = $this->UploaderFiles->find()
                     ->where(['UploaderFiles.name' => $name, 'UploaderFiles.id <>' => $entity->id])
                     ->count();
                 if ($exists) {
-                    throw new BcException(__d('baser_core', '同じ名前のファイルが既に存在します。'));
+                    throw new BcBadRequestException(__d('baser_core', '同じ名前のファイルが既に存在します。'));
                 }
             }
         }

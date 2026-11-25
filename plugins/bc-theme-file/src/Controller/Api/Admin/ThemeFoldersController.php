@@ -74,12 +74,8 @@ class ThemeFoldersController extends BcAdminApiController
         $allowMethod = [
             'delete' => __d('baser_core', '削除'),
         ];
+        if (!$this->validateBatchRequest($allowMethod, false)) return;
         $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
         $targets = $this->getRequest()->getData('batch_targets');
         $errors = null;
         try {

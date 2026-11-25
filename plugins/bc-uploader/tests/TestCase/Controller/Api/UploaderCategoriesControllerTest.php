@@ -286,6 +286,6 @@ class UploaderCategoriesControllerTest extends BcTestCase
         //APIを呼ぶ
         $this->post("/baser/api/admin/bc-uploader/uploader_categories/batch.json?token=" . $this->accessToken, $data);
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
     }
 }

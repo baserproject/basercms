@@ -330,12 +330,8 @@ class PluginsController extends BcAdminApiController
         $allowMethod = [
             'detach' => __d('baser_core', '無効化')
         ];
+        if (!$this->validateBatchRequest($allowMethod)) return;
         $method = $this->getRequest()->getData('batch');
-        if (!isset($allowMethod[$method])) {
-            $this->setResponse($this->response->withStatus(500));
-            $this->viewBuilder()->setOption('serialize', []);
-            return;
-        }
         $targets = $this->getRequest()->getData('batch_targets');
         $errors = null;
         try {

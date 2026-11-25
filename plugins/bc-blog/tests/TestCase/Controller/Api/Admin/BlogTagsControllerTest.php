@@ -190,9 +190,9 @@ class BlogTagsControllerTest extends BcTestCase
      */
     public function testBatch()
     {
-        // delete以外のHTTPメソッドには500エラーを返す
+        // delete 以外の処理名は 400 を返す
         $this->post('/baser/api/admin/bc-blog/blog_tags/batch.json?token=' . $this->accessToken, ['batch' => 'test']);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
 
         // データを作成する
         BlogTagFactory::make(['id' => 1, 'name' => 'tag1'])->persist();

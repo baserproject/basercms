@@ -261,7 +261,7 @@ class PermissionsControllerTest extends BcTestCase
 
         // 空データ送信
         $this->post('/baser/api/admin/baser-core/permissions/batch.json?token=' . $this->accessToken, []);
-        $this->assertResponseFailure();
+        $this->assertResponseCode(400);
 
         // unpublish
         $data = [

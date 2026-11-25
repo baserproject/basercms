@@ -172,6 +172,44 @@ class BcAdminApiController extends BcApiController
     }
 
     /**
+     * 一括処理の送信値を検証する
+     *
+     * 処理名（batch）が許可されたものか、対象（batch_targets）が配列で、
+     * ID を対象とする場合は数字のみで構成されているかを確認する。
+     * 不正な場合は 400 とメッセージを応答に設定して false を返す
+     *
+     * @param array $allowMethod 許可する処理名をキーとした配列
+     * @param bool $integerTargets 対象が ID（数字）の場合は true
+     * @return bool
+     * @checked
+     * @noTodo
+     * @unitTest
+     */
+    protected function validateBatchRequest(array $allowMethod, bool $integerTargets = true): bool
+    {
+        $method = $this->getRequest()->getData('batch');
+        $targets = $this->getRequest()->getData('batch_targets');
+        $message = null;
+        if (!is_string($method) || !isset($allowMethod[$method])) {
+            $message = __d('baser_core', '一括処理の処理内容が不正です。');
+        } elseif (!is_array($targets) || !$targets) {
+            $message = __d('baser_core', '一括処理の対象を指定してください。');
+        } else {
+            foreach($targets as $target) {
+                if (!is_scalar($target) || (string)$target === '' || ($integerTargets && !ctype_digit((string)$target))) {
+                    $message = __d('baser_core', '一括処理の対象に不正な値が含まれています。');
+                    break;
+                }
+            }
+        }
+        if ($message === null) return true;
+        $this->setResponse($this->response->withStatus(400));
+        $this->set('message', $message);
+        $this->viewBuilder()->setOption('serialize', ['message']);
+        return false;
+    }
+
+    /**
      * 処理中に受け止めた例外から、応答のステータスコードを設定し、メッセージを返す
      *
      * - 存在しないデータ（RecordNotFoundException / InvalidPrimaryKeyException）は 404

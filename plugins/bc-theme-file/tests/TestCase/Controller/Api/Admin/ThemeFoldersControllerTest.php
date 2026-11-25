@@ -74,7 +74,7 @@ class ThemeFoldersControllerTest extends BcTestCase
                 'batch' => 'create',
                 'batch_targets' => [$fullpath . 'delete_folder']
             ]);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
     }
 
     /**

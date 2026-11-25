@@ -366,7 +366,7 @@ class BlogPostsControllerTest extends BcTestCase
             'batch' => 'error',
             'batch_targets' => [1, 2]
         ]);
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
     }
 
     /**

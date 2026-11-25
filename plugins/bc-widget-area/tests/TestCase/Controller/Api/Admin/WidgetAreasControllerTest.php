@@ -317,6 +317,11 @@ class WidgetAreasControllerTest extends BcTestCase
         //戻る値を確認
         $result = json_decode((string)$this->_response->getBody());
         $this->assertEquals('データが見つかりません。', $result->message);
+        // ウィジェットの ID に数字以外を指定した場合は 400 とし、理由を返す
+        $this->post("/baser/api/admin/bc-widget-area/widget_areas/update_widget/1.json?token=" . $this->accessToken, ['Widget4' => ['id' => "4'"]]);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('ウィジェットの ID が不正です。', $result->message);
     }
 
     /**
