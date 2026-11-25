@@ -162,8 +162,9 @@ class ContentsTableTest extends BcTestCase
      */
     public function testInvalidIdSupplied(): void
     {
-        $this->expectException('InvalidArgumentException');
+        // 数字以外の ID は例外とせず、入力エラーとする
         $contents = $this->Contents->newEntity(['id' => 'aaa']);
+        $this->assertNotEmpty($contents->getError('id'));
     }
 
 

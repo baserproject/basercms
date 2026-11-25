@@ -234,14 +234,14 @@ class MailMessagesControllerTest extends BcTestCase
         // 追加したメールメッセージ内容を確認する
         $this->assertEquals('message after', $result->mailMessage->message);
 
-        // 無効なメールメッセージデータの場合、エラーになる
+        // 送信値の ID に数字以外を指定しても 500 にならず、URL の ID のデータを更新すること
         $data = ['id' => 'text'];
         $this->post("/baser/api/admin/bc-mail/mail_messages/edit/1.json?mail_content_id=1&token=$this->accessToken", $data);
         $result = json_decode((string)$this->_response->getBody());
         // レスポンスのコードを確認する
-        $this->assertResponseCode(500);
-        // レスポンスのメッセージ内容を確認する
-        $this->assertEquals('データベース処理中にエラーが発生しました。Cannot convert value `text` of type `string` to int', $result->message);
+        $this->assertResponseOk();
+        // URL の ID のデータが対象になっていることを確認する
+        $this->assertEquals(1, $result->mailMessage->id);
 
         //不要なテーブルを削除
         $MailMessagesService->dropTable(1);
