@@ -144,6 +144,13 @@ class PluginsTable extends AppTable
                 'db_init' => false,
                 'screenshot' => $hasScreenshot
             ]);
+            // 名前が入力チェックに通らない場合（51文字以上など）も、一覧で表示できるよう名前は保持する
+            // 入力エラーは残るため、そのまま保存されることはない
+            if ($pluginRecord->name === null) {
+                $nameErrors = $pluginRecord->getError('name');
+                $pluginRecord->name = $pluginName;
+                if ($nameErrors) $pluginRecord->setError('name', $nameErrors);
+            }
         }
 
         // 設定ファイル読み込み

@@ -437,6 +437,8 @@ class ThemesService implements ThemesServiceInterface
             if (!is_dir(BASER_THEMES . $newTheme)) break;
             $newTheme .= 'Copy';
         }
+        // プラグイン名は50文字以内のため、超える場合はコピーしない
+        if (mb_strlen($newTheme) > 50) return false;
         $folder = new BcFolder(BASER_THEMES . $theme);
         if (!$folder->copy(BASER_THEMES . $newTheme)) {
             return false;
