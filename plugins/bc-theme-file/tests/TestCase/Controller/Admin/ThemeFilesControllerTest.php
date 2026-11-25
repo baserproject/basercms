@@ -140,6 +140,10 @@ class ThemeFilesControllerTest extends BcTestCase
         $this->get('/baser/admin/bc-theme-file/theme_files/index');
         //ステータスを確認
         $this->assertResponseCode(404);
+
+        // 存在しないテーマを指定した場合は 404
+        $this->get("/baser/admin/bc-theme-file/theme_files/index/BcThemeSample'/layout");
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -377,10 +381,10 @@ class ThemeFilesControllerTest extends BcTestCase
 
         $folder->create();
         $tmpFile->create();
-        //エラーを発生した場合
+        //存在しないテーマを指定した場合
         $this->post('/baser/admin/bc-theme-file/theme_files/index/BcThemeSample333333/layout3');
         //ステータスを確認
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         //テストファイルとフォルダを削除
         $folder->delete();
     }

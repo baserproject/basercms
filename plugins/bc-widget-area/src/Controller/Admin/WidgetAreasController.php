@@ -99,7 +99,7 @@ class WidgetAreasController extends BcAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(WidgetAreasServiceInterface $service, $id)
+    public function delete(WidgetAreasServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         $entity = $service->get($id);

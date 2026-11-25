@@ -229,6 +229,9 @@ class EditorTemplatesControllerTest extends BcTestCase
         //check after delete
         $query = $editorTemplates->find()->where(['name' => '画像（左）とテキスト']);
         $this->assertEquals(0, $query->count());
+        // 数字以外の ID を指定した場合は 404
+        $this->post("/baser/admin/bc-editor-template/editor_templates/delete/11'");
+        $this->assertResponseCode(404);
         /**
          * check RecordNotFoundException
          */

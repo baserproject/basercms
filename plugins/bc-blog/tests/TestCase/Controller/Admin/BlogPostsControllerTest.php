@@ -465,6 +465,14 @@ class BlogPostsControllerTest extends BcTestCase
         //実行失敗のテスト　BlogPostコンテンツ準備足りないのを利用
         $this->post('/baser/admin/bc-blog/blog_posts/copy/1/2');
         $this->assertResponseCode(404);
+
+        // 数字以外の ID を指定した場合は 404
+        $this->post("/baser/admin/bc-blog/blog_posts/copy/1/1'");
+        $this->assertResponseCode(404);
+        $this->post("/baser/admin/bc-blog/blog_posts/publish/1/abs(1)");
+        $this->assertResponseCode(404);
+        $this->post("/baser/admin/bc-blog/blog_posts/unpublish/1'/1");
+        $this->assertResponseCode(404);
     }
 
 }

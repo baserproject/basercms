@@ -309,7 +309,7 @@ class BlogPostsController extends BlogAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function unpublish(BlogPostsServiceInterface $service, $blogContentId, $id)
+    public function unpublish(BlogPostsServiceInterface $service, int $blogContentId, int $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $this->assertBlogContent($service->get($id), $blogContentId);
@@ -335,7 +335,7 @@ class BlogPostsController extends BlogAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function publish(BlogPostsServiceInterface $service, $blogContentId, $id)
+    public function publish(BlogPostsServiceInterface $service, int $blogContentId, int $id)
     {
         if ($this->request->is(['patch', 'post', 'put'])) {
             $this->assertBlogContent($service->get($id), $blogContentId);
@@ -364,7 +364,7 @@ class BlogPostsController extends BlogAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function copy(BlogPostsServiceInterface $service, $blogContentId, $id = null)
+    public function copy(BlogPostsServiceInterface $service, int $blogContentId, int $id)
     {
         $post = $service->get($id);
         $this->assertBlogContent($post, $blogContentId);

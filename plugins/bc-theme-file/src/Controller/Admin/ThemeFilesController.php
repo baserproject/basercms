@@ -25,6 +25,7 @@ use BcThemeFile\Service\ThemeFoldersServiceInterface;
 use BcThemeFile\Utility\BcThemeFileUtil;
 use Cake\Controller\ComponentRegistry;
 use Cake\Core\Configure;
+use Cake\Core\Exception\MissingPluginException;
 use Cake\Core\Plugin;
 use Cake\Event\EventInterface;
 use Cake\Event\EventManagerInterface;
@@ -671,6 +672,13 @@ class ThemeFilesController extends BcAdminAppController
             }
         }
         if(!$data['theme']) return $data;
+
+        // 存在しないテーマが指定された場合は 404 とする
+        try {
+            Plugin::path($data['theme']);
+        } catch (MissingPluginException) {
+            $this->notFound();
+        }
 
         if (empty($data['type'])) $data['type'] = 'layout';
         if (!empty($args)) $data['path'] = rawurldecode(implode(DS, $args));

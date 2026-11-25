@@ -173,7 +173,7 @@ class BlogTagsController extends BlogAdminAppController
      * @noTodo
      * @unitTest
      */
-    public function delete(BlogTagsServiceInterface $service, $id)
+    public function delete(BlogTagsServiceInterface $service, int $id)
     {
         $this->request->allowMethod(['post', 'delete']);
         try {

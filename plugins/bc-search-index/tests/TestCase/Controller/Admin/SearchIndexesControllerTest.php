@@ -116,6 +116,10 @@ class SearchIndexesControllerTest extends BcTestCase
             'controller' => 'search_indexes',
             'action' => 'index'
         ]);
+
+        // 数字以外の ID を指定した場合は 404
+        $this->delete("/baser/admin/bc-search-index/search_indexes/delete/abs(1)");
+        $this->assertResponseCode(404);
     }
 
     /**

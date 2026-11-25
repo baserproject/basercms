@@ -94,7 +94,7 @@ class SearchIndexesController extends BcAdminAppController
      * @checked
      * @unitTest
      */
-    public function delete(SearchIndexesServiceInterface $service, $id = null)
+    public function delete(SearchIndexesServiceInterface $service, ?int $id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
         if (!$id) {
