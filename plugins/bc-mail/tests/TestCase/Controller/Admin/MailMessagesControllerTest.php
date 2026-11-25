@@ -105,7 +105,7 @@ class MailMessagesControllerTest extends BcTestCase
         $this->MailMessagesController = new MailMessagesController($request);
         $event = new Event('filter');
         $this->expectExceptionMessage('コンテンツデータが見つかりません。');
-        $this->expectException('BaserCore\Error\BcException');
+        $this->expectException('Cake\Http\Exception\NotFoundException');
         $this->MailMessagesController->beforeFilter($event);
     }
 

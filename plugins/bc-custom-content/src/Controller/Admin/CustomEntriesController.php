@@ -11,7 +11,6 @@
 
 namespace BcCustomContent\Controller\Admin;
 
-use BaserCore\Error\BcException;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use BaserCore\Utility\BcSiteConfig;
@@ -67,7 +66,7 @@ class CustomEntriesController extends CustomContentAdminAppController
                 $contentId,
                 $this->getRequest()
             );
-            if (!$request) throw new BcException(__d('baser_core', 'コンテンツデータが見つかりません。'));
+            if (!$request) throw new NotFoundException(__d('baser_core', 'コンテンツデータが見つかりません。'));
             $this->setRequest($request);
         }
     }

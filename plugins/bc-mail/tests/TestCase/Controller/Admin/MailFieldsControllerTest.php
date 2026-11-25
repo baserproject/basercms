@@ -113,7 +113,7 @@ class MailFieldsControllerTest extends BcTestCase
         $this->MailFieldsController = new MailFieldsController($request);
         $event = new Event('filter');
         $this->expectExceptionMessage('コンテンツデータが見つかりません。');
-        $this->expectException('BaserCore\Error\BcException');
+        $this->expectException('Cake\Http\Exception\NotFoundException');
         $this->MailFieldsController->beforeFilter($event);
     }
 
