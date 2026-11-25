@@ -216,6 +216,10 @@ class MailContentsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $entity = null;
         try {
+            $this->getIntegerData('entity_id');
+            $this->getIntegerData('parent_id');
+            $this->getIntegerData('site_id', false);
+            $this->assertScalarData('title');
             $entity = $service->copy($this->request->getData());
             if (!$entity) {
                 $this->setResponse($this->response->withStatus(400));

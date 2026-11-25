@@ -199,6 +199,10 @@ class BlogContentsController extends BcAdminApiController
         $this->request->allowMethod(['post', 'put', 'patch']);
         $blogContent = $content = null;
         try {
+            $this->getIntegerData('entity_id');
+            $this->getIntegerData('parent_id');
+            $this->getIntegerData('site_id', false);
+            $this->assertScalarData('title');
             $blogContent = $service->copy($this->request->getData());
             if (!$blogContent) {
                 $this->setResponse($this->response->withStatus(400));

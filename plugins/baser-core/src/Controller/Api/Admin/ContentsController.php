@@ -11,6 +11,7 @@
 
 namespace BaserCore\Controller\Api\Admin;
 
+use BaserCore\Error\BcBadRequestException;
 use BaserCore\Service\ContentsService;
 use BaserCore\Service\ContentsServiceInterface;
 use Cake\Datasource\Exception\RecordNotFoundException;
@@ -295,6 +296,7 @@ class ContentsController extends BcAdminApiController
         $result = false;
         if ($id && $status) {
             try {
+                $id = $this->getIntegerData('id');
                 switch ($status) {
                     case 'publish':
                         $content = $service->publish($id);
@@ -306,6 +308,8 @@ class ContentsController extends BcAdminApiController
                         $message = __d('baser_core', 'コンテンツ: {0} を非公開にしました。', $content->title);
                         $this->BcMessage->setSuccess($message, true, false);
                         break;
+                    default:
+                        throw new BcBadRequestException(__d('baser_core', '{0} に不正な値が指定されています。', 'status'));
                 }
                 $result = true;
             } catch (PersistenceFailedException $e) {
@@ -436,6 +440,12 @@ class ContentsController extends BcAdminApiController
         $this->request->allowMethod(['post']);
         $alias = $errors = null;
         try {
+            if (!is_array($this->request->getData('content'))) {
+                throw new BcBadRequestException(__d('baser_core', '{0} を指定してください。', 'content'));
+            }
+            $this->getIntegerData('content.alias_id');
+            $this->getIntegerData('content.parent_id', false);
+            $this->getIntegerData('content.site_id', false);
             $alias = $service->alias($this->request->getData('content'));
             $message = __d('baser_core', '{0} を作成しました。', $alias->title);
             $this->BcMessage->setSuccess($message, true, false);
@@ -489,6 +499,16 @@ class ContentsController extends BcAdminApiController
         $url = $content = $errors = null;
 
         try {
+            foreach(['origin', 'target'] as $key) {
+                if (!is_array($this->request->getData($key))) {
+                    throw new BcBadRequestException(__d('baser_core', '{0} を指定してください。', $key));
+                }
+            }
+            $this->getIntegerData('origin.id');
+            $this->getIntegerData('origin.parentId', false);
+            $this->getIntegerData('target.id', false);
+            $this->getIntegerData('target.parentId');
+            $this->getIntegerData('target.siteId', false);
             $beforeContent = $service->get($this->request->getData('origin.id'));
             $beforeUrl = $beforeContent->url;
             $content = $service->move($this->request->getData('origin'), $this->request->getData('target'));
