@@ -729,6 +729,19 @@ class BcContentsHelperTest extends BcTestCase
     }
 
     /**
+     * test getFolderLinkedUrl
+     * 該当するフォルダが存在しない場合はリンクにせず文字列として出力する
+     */
+    public function testGetFolderLinkedUrlWithoutFolder()
+    {
+        $content = $this->getTableLocator()->get('BaserCore.Contents')->find()->contain(['Sites'])->where([
+            'url' => '/about'
+        ])->first();
+        $content->url = '/not-exist%3Cb%3E/about';
+        $this->assertEquals('https://localhost/not-exist&lt;b&gt;/', $this->BcContents->getFolderLinkedUrl($content));
+    }
+
+    /**
      * フォルダ内の次のコンテンツへのリンクを取得する
      * @param string $url
      * @param string $title
