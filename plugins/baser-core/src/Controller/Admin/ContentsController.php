@@ -211,8 +211,13 @@ class ContentsController extends BcAdminAppController
             $this->ajaxError(500, __d('baser_core', '無効な処理です。'));
         }
         $this->disableAutoRender();
+        $trash = $service->getTrash($id);
         if ($restored = $service->restore($id)) {
-            $this->BcMessage->setSuccess(__d('baser_core', 'ゴミ箱「{0}」を戻しました。', $restored->title));
+            if ($restored->parent_id === $trash->trashed_parent_id) {
+                $this->BcMessage->setSuccess(__d('baser_core', 'ゴミ箱「{0}」を戻しました。', $restored->title));
+            } else {
+                $this->BcMessage->setWarning(__d('baser_core', 'ゴミ箱「{0}」を戻しましたが、元のフォルダが存在しないため、サイト直下に非公開の状態で戻しました。', $restored->title), true);
+            }
             return $this->redirect(['action' => 'index']);
         } else {
             $this->BcMessage->setError(__d('baser_core', 'ゴミ箱から戻す事に失敗しました。'));
