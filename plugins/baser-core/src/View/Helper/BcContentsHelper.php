@@ -745,6 +745,11 @@ class BcContentsHelper extends Helper
             $checkUrl .= $value . '/';
             $target = $contentsTable->find()->select('entity_id')->where(['url' => $checkUrl])->first();
             /* @var Content $target */
+            if (!$target) {
+                // 該当するフォルダが存在しない場合はリンクにしない
+                $urlArray[$key] = h(rawurldecode($value));
+                continue;
+            }
             $entityId = $target->entity_id;
             $urlArray[$key] = $this->BcBaser->getLink(rawurldecode($value), [
                 'admin' => true,
