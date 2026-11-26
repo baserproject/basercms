@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace BcMcp\Model\Table;
 
-use Cake\ORM\Table;
+use BaserCore\Model\Table\AppTable;
 use Cake\Validation\Validator;
 
 /**
  * Oauth2RefreshTokens Table
  */
-class Oauth2RefreshTokensTable extends Table
+class Oauth2RefreshTokensTable extends AppTable
 {
 
     /**
