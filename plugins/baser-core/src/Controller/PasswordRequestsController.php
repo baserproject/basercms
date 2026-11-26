@@ -21,6 +21,7 @@ use BaserCore\Annotation\Checked;
 use BaserCore\Service\PasswordRequestsService;
 use BaserCore\Service\PasswordRequestsServiceInterface;
 use BaserCore\Service\UsersServiceInterface;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\ORM\Exception\PersistenceFailedException;
 use Psr\Http\Message\ResponseInterface;
@@ -45,6 +46,7 @@ class PasswordRequestsController extends BcAdminAppController
     public function initialize(): void
     {
         parent::initialize();
+        if (Configure::read('BcPrefixAuth.Front.disabled')) $this->notFound();
         $this->Authentication->allowUnauthenticated(['entry', 'apply', 'done']);
     }
 
