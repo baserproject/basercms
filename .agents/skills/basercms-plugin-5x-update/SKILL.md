@@ -8,7 +8,7 @@ license: MIT
 
 baserCMS プラグインを 5.2系 から 5.3系へ移行する際に遭遇した baserCMS 固有の問題と修正レシピ集。**バージョン別**に整理して育てる。
 
-> **推奨: 着手前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan の Markdown プレビュー）を整える。提案ベースで、整っていればスキップ。**
+> **推奨: 着手前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan をコメントできるドキュメントでレビュー）を整える。提案ベースで、整っていればスキップ。**
 
 > 収録: 5.2 → 5.3。5.3系は **PHP 8.5 / CakePHP 5.2.x** ベース（執筆時点で開発中）。
 > 役割分担:

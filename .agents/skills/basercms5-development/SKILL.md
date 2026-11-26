@@ -10,7 +10,7 @@ license: MIT
 
 5系スキルは3層構造になっており、本スキルは**共通ベース（環境・ディレクトリ構成・命名・ログ・コアハック禁止・サーバ制約）**を扱う。実装パターンは分野別スキルが正本: **プラグイン開発・改修 → `basercms5-plugin-development`**、**テーマ開発・改修 → `basercms5-theme-development`**、**4→5 移行作業 → `basercms4-to-5-upgrade`**（配下の分野別移行スキル含む）。
 
-> **推奨: 5系の開発に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan の Markdown プレビュー）を整える。提案ベースで、整っていればスキップ。**
+> **推奨: 5系の開発に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan をコメントできるドキュメントでレビュー）を整える。提案ベースで、整っていればスキップ。**
 
 ---
 

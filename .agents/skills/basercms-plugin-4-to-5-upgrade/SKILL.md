@@ -12,7 +12,7 @@ license: MIT
 
 **ブログ記事等にカスタムフィールドを後付けする4系プラグインを5系標準の bc-custom-content へ移行する場合は、本スキルではなく basercms5-custom-content-development を参照する**（bc-custom-content は既存 blog_posts への後付けフィールド追加には使えず、独立したコンテンツ種別として作り直す設計になるため、通常のプラグイン内部コード変換とは別の専用パターン集が必要）。
 
-> **推奨: 移行に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan の Markdown プレビュー）を整える。提案ベースで、整っていればスキップ。下記「移行の進め方」はその環境の上で回す。**
+> **推奨: 移行に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（設計=superpowers brainstorming／権限整理=permissions-audit／その上での Auto mode／spec・plan をコメントできるドキュメントでレビュー）を整える。提案ベースで、整っていればスキップ。下記「移行の進め方」はその環境の上で回す。**
 
 ## 移行の進め方（最重要・最初にやる順序）
 プラグインの 4→5 移行は、**画面を1枚ずつ場当たりで直す前に、まず横断で全体を片付ける**のが速くて安全。実証済みの推奨順序:

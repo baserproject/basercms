@@ -1,12 +1,12 @@
 ---
 name: basercms-security-advisory
-description: baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage含む）対応を、一覧取得→指摘検証→課題別の修正→プライベートフォーク/ブランチ/PR作成→ローカル検証まで一気通貫で扱う手順とスクリプト。「セキュリティアドバイザリを確認」「triageの脆弱性を検証」「アドバイザリごとにフォークとPRを作って」「脆弱性修正をプルリクにまとめて」等のときに使う。Copilot/GHAはアドバイザリforkで使えないためローカル検証（/code-review・basercms-unittest）を正とする点、push反映待ちリトライ、共有ファイルのhunk分割、base追従の定番競合解決を収録。
+description: baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage含む）対応を、一覧取得→指摘検証→課題別の修正→プライベートフォーク/ブランチ/PR作成→ローカル検証まで一気通貫で扱う手順とコマンド集。「セキュリティアドバイザリを確認」「triageの脆弱性を検証」「アドバイザリごとにフォークとPRを作って」「脆弱性修正をプルリクにまとめて」等のときに使う。Copilot/GHAはアドバイザリforkで使えないためローカル検証（/code-review・basercms-unittest）を正とする点、push反映待ちリトライ、共有ファイルのhunk分割、base追従の定番競合解決を収録。
 license: MIT
 ---
 
 # baserCMS セキュリティアドバイザリ対応ガイド
 
-baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage 含む）を、一覧→検証→課題別修正→フォーク/ブランチ/PR→ローカル検証まで一気通貫で扱う。スクリプトは `scripts/` 配下。**base ブランチは実行時の現在のブランチ**（事前に対象リリースブランチを checkout しておく）。
+baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage 含む）を、一覧→検証→課題別修正→フォーク/ブランチ/PR→ローカル検証まで一気通貫で扱う。実行するコマンドは `references/commands.md` にまとめてある（各見出し名で参照）。**base ブランチは実行時の現在のブランチ**（事前に対象リリースブランチを checkout しておく）。
 
 ## 0. 前提
 - `gh` CLI 認証済み。対象 upstream は `BCSA_UPSTREAM`（既定 `baserproject/basercms`）。
@@ -14,25 +14,25 @@ baserCMS のリポジトリセキュリティアドバイザリ（GHSA・triage 
 - フォーク full_name=`<owner>/basercms-<小文字GHSA>`、remote=`sec-<小文字GHSA(先頭ghsa-除去)>`、ブランチ=`security/<GHSA-ID>`。
 
 ## 1. 一覧と分類
-`scripts/list-advisories.sh [--state triage]` で state別件数と一覧を取得し、triage を抽出する。
+commands.md の **list-advisories**（state=triage で絞り込み）で state別件数と一覧を取得し、triage を抽出する。
 
 ## 2. 指摘の検証
-`scripts/fetch-advisory.sh <GHSA-ID>` で詳細を取得し、**現在のブランチの実コード**と突き合わせて「的確 / 不正確 / 非該当」を判定する。対象が多い場合は読み取り専用の並列サブエージェントで分担する。フレームワークのデフォルト保護（ORM バインド / slug エンコード / `h()` 出力）で再現しないものは非該当として却下し、具体的な PoC を要求する。
+commands.md の **fetch-advisory** で詳細を取得し、**現在のブランチの実コード**と突き合わせて「的確 / 不正確 / 非該当」を判定する。対象が多い場合は読み取り専用の並列サブエージェントで分担する。フレームワークのデフォルト保護（ORM バインド / slug エンコード / `h()` 出力）で再現しないものは非該当として却下し、具体的な PoC を要求する。
 
 ## 3. 修正方針の確定
 同一 sink の重複アドバイザリ、共有ファイルの hunk 分割、非該当の却下を整理する。重複の扱い（複数 fork へ同一修正 / 片方を重複クローズ）など判断が要る点はユーザーに確認する。
 
 ## 4. 課題別フォーク/ブランチ/PR
 アドバイザリ単位で:
-1. `scripts/create-fork-branch.sh <GHSA-ID>` — フォーク作成 → remote 追加 → 現ブランチ起点でブランチ作成
+1. **create-fork-branch** — フォーク作成 → remote 追加 → 現ブランチ起点でブランチ作成
 2. 該当 hunk のみ適用（複数アドバイザリが同一ファイルを触る場合は `git checkout … -- file` で全取りせず hunk 単位で手適用）
 3. どの脆弱性をどう直したか明確なメッセージでコミット
-4. `scripts/push-with-retry.sh <remote> security/<GHSA-ID>` — フォーク反映待ちのリトライ付き push
-5. `scripts/open-pr.sh <GHSA-ID> [--title T] [--body-file F]` — base=現ブランチで PR 作成
+4. **push-with-retry** — フォーク反映待ちのリトライ付き push
+5. **open-pr** — base=現ブランチで PR 作成
 
 ## 5. ローカル検証
-1. `scripts/build-integration.sh [統合ブランチ名]` — 現ブランチ＋全 `security/GHSA-*` をマージ（競合は停止）
-2. `scripts/run-tests.sh` — ローカル全テスト（詳細は `basercms-unittest`）
+1. **build-integration** — 現ブランチ＋全 `security/GHSA-*` をマージ（競合は停止）
+2. **run-tests** — ローカル全テスト（詳細は `basercms-unittest`）
 3. 必要なら統合ブランチを個人フォーク（`<個人フォーク名>`）へ push して GHA を回す（**アドバイザリ fork では GHA は動かない**）
 
 ## 6. 最新 base への追従
@@ -66,16 +66,16 @@ origin/base が進んだら各 PR ブランチへ base をマージし、push �
 - **Packagist の反映は Web 表示より遅れる**: split ワークフロー成功後、packagist.org のページに新バージョンが出ていても、Composer が読む `repo.packagist.org/p2/<vendor>/<pkg>.json` への反映は数分遅れる。`Root composer.json requires ... does not match the constraint` はこの遅れが原因なことが多い。`composer show --all <pkg>` で `versions` を確認し、数分待って再実行。キャッシュ削除はホストではなく**アップデートを実行しているコンテナ内**で行う。
 - **誤ってタグを出したときの取り下げ**: 本体だけでなく split 先の全リポジトリ（`split_monorepo.yml` の一覧）から `gh api --method DELETE /repos/baserproject/<repo>/git/refs/tags/<ver>` で消す。Packagist は再クロールで「No longer found in upstream」となり自動で消える。5.x ブランチに残ったリリースコミット（VERSION.txt 1 行目・composer.json）は `X.Y.Z-dev` に戻すコミットを別途入れる。
 
-## 8. 補助スクリプト一覧
-| スクリプト | 引数 | 役割 |
-|---|---|---|
-| list-advisories.sh | `[--state S]` | アドバイザリ一覧・集計 |
-| fetch-advisory.sh | `<GHSA-ID>` | 個別詳細取得（/tmp/bc-advisories へ保存） |
-| create-fork-branch.sh | `<GHSA-ID>` | フォーク作成→remote→現ブランチ起点ブランチ |
-| push-with-retry.sh | `<remote> <branch> [max]` | 反映待ちリトライ push |
-| open-pr.sh | `<GHSA-ID> [--title T] [--body-file F]` | base=現ブランチで PR 作成 |
-| build-integration.sh | `[統合ブランチ名]` | 全 PR を統合ブランチへマージ |
-| run-tests.sh | `[--filter X]` | ローカル全テスト（basercms-unittest 連携） |
+## 8. 補助コマンド一覧（`references/commands.md`）
+| 見出し | 役割 |
+|---|---|
+| list-advisories | アドバイザリ一覧・集計 |
+| fetch-advisory | 個別詳細取得（/tmp/bc-advisories へ保存） |
+| create-fork-branch | フォーク作成→remote→現ブランチ起点ブランチ |
+| push-with-retry | 反映待ちリトライ push |
+| open-pr | base=現ブランチで PR 作成 |
+| build-integration | 全 PR を統合ブランチへマージ |
+| run-tests | ローカル全テスト（basercms-unittest 連携） |
 
 ## 9. 既存スキル連携
 - **連絡・記録・公開物は本スキルの範囲外**: 報告者への返信コメント、GHSA の受理／深刻度／影響・修正版／credits／重複クローズなどメタ情報の更新、CVE 申請状況、JPCERT/JVN との往復、ベンダステートメント、公式サイトの脆弱性情報ページ原稿、管理表／課題／チャットへの記録、リリース当日チェックは、脆弱性ハンドリング（調整・広報）側の手順で扱う。本スキルは「コードの検証・修正・フォーク/PR・ローカル検証」に集中し、結論（該当／非該当、ブランチ名、PR URL、テスト結果）を返す。

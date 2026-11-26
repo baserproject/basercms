@@ -8,7 +8,7 @@ license: MIT
 
 このファイルは、baserCMS 4 (CakePHP 2ベース) のコードを baserCMS 5 (CakePHP 5ベース) に移行する際、AIエージェントが遵守すべきルールとパターンを定義します。
 
-> **推奨: 移行に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（権限整理=permissions-audit／その上での Auto mode／設計=superpowers brainstorming／spec・plan の Markdown プレビュー）を整える。提案ベースで、整っていればスキップ。**
+> **推奨: 移行に着手する前に一度 `basercms5-claude-workflow-setup`（環境セットアップ）を参照し、進め方の環境（権限整理=permissions-audit／その上での Auto mode／設計=superpowers brainstorming／spec・plan をコメントできるドキュメントでレビュー）を整える。提案ベースで、整っていればスキップ。**
 
 ## 基本方針
 
