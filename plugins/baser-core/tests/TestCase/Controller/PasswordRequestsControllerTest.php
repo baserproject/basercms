@@ -16,6 +16,8 @@ use BaserCore\Test\Scenario\SiteConfigsScenario;
 use BaserCore\Test\Scenario\SitesScenario;
 use BaserCore\Test\Scenario\UsersScenario;
 use BaserCore\TestSuite\BcTestCase;
+use Cake\Core\Configure;
+use Cake\Event\EventManager;
 use Cake\TestSuite\EmailTrait;
 use Cake\TestSuite\IntegrationTestTrait;
 use Cake\TestSuite\TestEmailTransport;
@@ -31,6 +33,12 @@ class PasswordRequestsControllerTest extends BcTestCase
     use ScenarioAwareTrait;
 
     /**
+     * リクエスト時のフロント認証の無効設定
+     * @var bool
+     */
+    protected bool $frontAuthDisabled = false;
+
+    /**
      * set up
      */
     public function setUp(): void
@@ -40,6 +48,37 @@ class PasswordRequestsControllerTest extends BcTestCase
         $this->loadFixtureScenario(SitesScenario::class);
         $this->loadFixtureScenario(UsersScenario::class);
         $this->loadFixtureScenario(PasswordRequestsScenario::class);
+        // 統合テストはリクエストごとに setting.php を読み直すため、bootstrap 後に上書きする
+        $this->frontAuthDisabled = false;
+        EventManager::instance()->on('Server.buildMiddleware', function () {
+            Configure::write('BcPrefixAuth.Front.disabled', $this->frontAuthDisabled);
+        });
+    }
+
+    /**
+     * Test initialize
+     *
+     * フロント認証が無効なときは、再発行の画面をすべて開けないようにする
+     */
+    public function testInitializeWhenFrontAuthDisabled()
+    {
+        $this->frontAuthDisabled = true;
+        TestEmailTransport::clearMessages();
+        $this->enableSecurityToken();
+        $this->enableCsrfToken();
+
+        $this->get('/baser-core/password_requests/entry');
+        $this->assertResponseCode(404);
+
+        $this->post('/baser-core/password_requests/entry', ['email' => 'testuser1@example.com']);
+        $this->assertResponseCode(404);
+        $this->assertNoMailSent();
+
+        $this->get('/baser-core/password_requests/apply/testkey');
+        $this->assertResponseCode(404);
+
+        $this->get('/baser-core/password_requests/done');
+        $this->assertResponseCode(404);
     }
 
     /**
