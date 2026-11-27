@@ -5,7 +5,7 @@ namespace BcMcp\Model\Table;
 
 use Cake\Datasource\EntityInterface;
 use Cake\ORM\RulesChecker;
-use Cake\ORM\Table;
+use BaserCore\Model\Table\AppTable;
 use Cake\Validation\Validator;
 
 /**
@@ -25,7 +25,7 @@ use Cake\Validation\Validator;
  * @method \BcMcp\Model\Entity\Oauth2Client[]|\Cake\Datasource\ResultSetInterface|false deleteMany(iterable $entities, $options = [])
  * @method \BcMcp\Model\Entity\Oauth2Client[]|\Cake\Datasource\ResultSetInterface deleteManyOrFail(iterable $entities, $options = [])
  */
-class Oauth2ClientsTable extends Table
+class Oauth2ClientsTable extends AppTable
 {
 
     /**
