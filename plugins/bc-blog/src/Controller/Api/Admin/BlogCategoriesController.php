@@ -178,7 +178,7 @@ class BlogCategoriesController extends BcAdminApiController
 
         $blogCategory = $errors = null;
         try {
-            $blogCategory = $service->create($postData['blog_content_id'], $postData);
+            $blogCategory = $service->create($this->getIntegerData('blog_content_id'), $postData);
             $message = __d('baser_core', 'ブログカテゴリー「{0}」を追加しました。', $blogCategory->name);
             $this->BcMessage->setSuccess($message, true, false);
         } catch (PersistenceFailedException $e) {

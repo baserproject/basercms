@@ -68,6 +68,16 @@ class ThemeFoldersControllerTest extends BcTestCase
         //実際にフォルダが削除されいてるか確認すること
         $this->assertFalse(file_exists($fullpath . 'delete_folder'));
 
+        //削除済みなど、存在しない対象を指定した場合は 400
+        $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
+            [
+                'batch' => 'delete',
+                'batch_targets' => [$fullpath . 'delete_folder']
+            ]);
+        $this->assertResponseCode(400);
+        $result = json_decode((string)$this->_response->getBody());
+        $this->assertEquals('一括処理の対象が存在しません。', $result->message);
+
         //$allowMethodは削除ではない場合、
         $this->post('/baser/api/admin/bc-theme-file/theme_folders/batch.json?token=' . $this->accessToken,
             [
