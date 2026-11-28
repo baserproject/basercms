@@ -15,6 +15,7 @@ use Cake\Http\Exception\ForbiddenException;
 use Cake\Event\EventInterface;
 use Cake\Core\Configure;
 use BaserCore\Controller\Api\Admin\BcAdminApiController;
+use BaserCore\Error\BcBadRequestException;
 use BaserCore\Error\BcFormFailedException;
 use BaserCore\Utility\BcUtil;
 use BcThemeFile\Service\ThemeFoldersService;
@@ -85,6 +86,11 @@ class ThemeFoldersController extends BcAdminApiController
                 $fullpath = dirname($targets[0]);
             }
             $names = $service->getNamesByFullpath($targets);
+            foreach($targets as $target) {
+                if (!file_exists($target)) {
+                    throw new BcBadRequestException(__d('baser_core', '一括処理の対象が存在しません。'));
+                }
+            }
             $service->batch($method, $targets);
             $this->BcMessage->setSuccess(
                 __d('baser_core', 'フォルダー {0} 内の「{1}」を {2} しました。', $fullpath, implode('」、「', $names), $allowMethod[$method]),
